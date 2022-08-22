@@ -5,10 +5,15 @@ The role installs Apache, PostgreSQL, GlassFish/Payara and other prerequisites, 
 
 ## Quickstart
 
-Running the following commands as root should install the latest released version of Dataverse.
+Running the following commands as root should install the latest released version of Dataverse. Note: these commands assume you are in the directory ABOVE `dataverse` (the root directory name of your project) when running the ansible-playbook script.
 
-	$ git clone https://github.com/GlobalDataverseCommunityConsortium/dataverse-ansible.git dataverse
-	$ ansible-playbook --connection=local -v -i dataverse/inventory dataverse/dataverse.pb -e "@dataverse/defaults/main.yml"
+```shell
+sudo apt-get install git -y
+sudo git clone https://github.com/GlobalDataverseCommunityConsortium/dataverse-ansible.git dataverse
+sudo apt-get update
+sudo apt-get install ansible -y
+ansible-playbook --connection=local -v -i dataverse/inventory dataverse/dataverse.pb -e "@dataverse/defaults/main.yml"
+```
 
 Recent, specific versions of Dataverse (namely, 4.20 and 5.0) may be installed using branches tagged with that version.
 
@@ -36,6 +41,7 @@ To utilize Certbot with Let's Encrypt certificates you need to set the following
 - `apache.ssl.enabled: true`
 
 #### Other certificates
+
 If you need to set particular certificates, for instance if your organization already has prepared this for you we need to modify the following parameters:
 
 - `apache.ssl.enabled: true`
@@ -62,12 +68,15 @@ Make sure you set your site url accordingly using `dataverse.payara.siteurl`. Al
 enter the domain here you will have issues with for instance enabling OAuth 2.0/OpenID Connect authentication etc. Assuming you have already enabled SSL, you should then make 
 sure to use something like `dataverse.payara.siteurl: https://dataverse.example.edu` (following the example provided in the Dataverse documentation).
 
-### Full(er) Usage:
+### Full(er) Usage
+
 Here is an example of how to execute the `dataverse-ansible` role with more adjustable parameters:
 
-	$ git clone https://github.com/GlobalDataverseCommunityConsortium/dataverse-ansible.git dataverse
-	$ export ANSIBLE_ROLES_PATH=.
-	$ ansible-playbook -i <inventory file> [-u <user>] [-b] [-K] -e "@dataverse/defaults/main.yml" [-v] dataverse/dataverse.pb
+```shell
+git clone https://github.com/GlobalDataverseCommunityConsortium/dataverse-ansible.git dataverse
+export ANSIBLE_ROLES_PATH=.
+ansible-playbook -i <inventory file> [-u <user>] [-b] [-K] -e "@dataverse/defaults/main.yml" [-v] dataverse/dataverse.pb
+```
 
 | option | expansion                             | required |
 | ------ | ------------------------------------- | -------- |
@@ -89,9 +98,12 @@ It is possible to run certain portions of the playbook to avoid running the enti
 **Note:** While Ansible in general strives to achieve role idempotence, the dataverse-ansible role is merely a wrapper for the Dataverse installer, which itself is not idempotent. If you strongly desire that the role be idempotent and would like achieve this via semaphores, pull requests are welcome!
 
 ### To test using Vagrant:
-	$ git clone https://github.com/GlobalDataverseCommunityConsortium/dataverse-ansible
-	$ cd dataverse-ansible
-	$ vagrant up
+
+```shell
+git clone https://github.com/GlobalDataverseCommunityConsortium/dataverse-ansible
+cd dataverse-ansible
+vagrant up
+```
 
 On successful completion of the Vagrant run, you should be able to log in to your test Dataverse as dataverseAdmin using the dataverse_adminpass from tests/group_vars/vagrant.yml using the address:
 
@@ -100,6 +112,7 @@ On successful completion of the Vagrant run, you should be able to log in to you
 If you needed to update the host port in the Vagrantfile due to collision, you'd append it to the URL, for example "http://localhost:8080"
 
 ### Key components
+
 * Apache httpd
   * Used as a front-end (proxy) for Glassfish (and Shibboleth, if enabled).
   * Default config location: */etc/httpd/conf.d*

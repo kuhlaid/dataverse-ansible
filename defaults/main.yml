@@ -8,7 +8,7 @@ dataverse_repo: https://github.com/IQSS/dataverse.git
 # dataverse_installer_url: https://example.com/path/to/dvinstall.zip
 
 # set this to true for troubleshooting
-any_errors_fatal: false
+var_all_fatal_errors: true
 
 apache:
   enabled: true
